@@ -3,10 +3,14 @@ package com.nickbattam.firstapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+
+import java.util.Date;
+import java.util.List;
 
 public class MyActivity extends AppCompatActivity {
     public final static String EXTRA_MESSAGE = "com.nickbattam.firstapp.MESSAGE";
@@ -15,6 +19,30 @@ public class MyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
+
+        runDBExample();
+    }
+
+    private void runDBExample() {
+
+        DBHandler db = new DBHandler(this);
+
+        Log.d("Insert: ", "Inserting ..");
+        db.addBlood(new Blood(11, new Date(), 5.7));
+        db.addBlood(new Blood(13, new Date(2015, 10, 4, 14, 2), 15.7));
+        db.addBlood(new Blood(14, new Date(2015, 5, 16, 3, 28), 3.5));
+        db.addBlood(new Blood(16, new Date(2015, 3, 25, 11, 16), 7.1));
+
+        Log.d("Reading: ", "Reading all bloods...");
+        List<Blood> bloods = db.getAllBloods();
+
+        for (Blood blood : bloods) {
+            String log = "Id: " + blood.getId() +
+                    " ,value: " + Double.toString(blood.getValue()) +
+                    " ,date: " + blood.getDatetime().toString();
+// Writing bloods to log
+            Log.d("Bloods : ", log);
+        }
     }
 
     @Override
